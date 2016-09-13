@@ -20,7 +20,24 @@ The client posts to the taskmaster to create a task. The post can
 include context data and a list of observers. The response is the URL 
 of the created task. 
 
+A task has:
 
+  * context data
+  * state
+  * list of observers
+  * result data
+
+Observers will receive any change to the task. Observers can added and 
+removed.
+
+The state is one of the following:
+
+ - open
+ - suspended
+ - running
+ - completed
+ - failed
+ - terminated
 
 ## Human Microservices
 
@@ -36,6 +53,7 @@ There are four services, two of which are in the basic ASAP model:
  * WORKLIST: the microservice that assigns tasks to a person
  * UX: the user interface that the person uses to see tasks and enter 
  information
+ 
  
  
  

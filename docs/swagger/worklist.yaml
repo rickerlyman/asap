@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: 0.1.0
-  title: 'ASAP Assignment'
+  title: 'ASAP Worklist'
 schemes:
   - http
 consumes:
@@ -9,9 +9,9 @@ consumes:
 produces:
   - application/json
 paths:
-  '/assignment':
+  '/worklists':
     get:
-      description: List of assignments
+      description: list of worklist IDs
       responses:
         '200':
           description: OK
@@ -22,96 +22,128 @@ paths:
     post:
       description: assign a task
       parameters:
-        - name: taskInstance
+        - name: task
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Instance'
+            $ref: '#/definitions/Task'
       responses:
         '200':
-          description: ID of new assignment
+          description: the URL of the work list assignment
           schema:
             type: string
-  '/worklists':
-    get:
-      description: list of worklists
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              type: string
+            format: url
   '/worklists/{worklistId}':
     get:
-      description: worklist
+      description: get worklist descrition
       parameters:
         - name: worklistId
-          in: header
+          in: path
           required: true
-          schema: string
+          type: string
       responses:
         200:
-          description: list of assignments
+          description: list of assignment IDs
+          schema:
+            $ref: '#/definitions/Worklist'
+  '/worklists/{worklistId}/assignments':
+    get:
+      description: get list of assignments
+      parameters:
+        - name: worklistId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: list of assignment IDs
           schema:
             type: array
             items:
               type: string
-  '/worklists/{worklistId}/{assignmentId}':
+  '/worklists/{worklistId}/assignments/{assignmentId}':
     get:
       description: worklist
       parameters:
         - name: worklistId
-          in: header
+          in: path
           required: true
-          schema: string
+          type: string
         - name: assignmentId
-          in: header
+          in: path
           required: true
-          schema: string
+          type: string
       responses:
         200:
           description: assignment
           schema:
-            $ref: '#definitions/Assignment'
+            $ref: '#/definitions/Assignment'
 definitions:
-  Assignment:
+  Task:
     type: object
-    properties:
-      id:
-        type: string
-      task:
-        type: string
-        format: url
-      instanceId:
-        type: string
-      worklistId:
-        type: string
-  Instance:
-    type: object
+    description: |
+      the request for assignment. it can include a list of possible
+      user interfaces (UX) to use
     properties:
       id:
         type: string
       url:
         type: string
         format: url
-      task:
+      taskmaster:
+        type: string
+        format: url
+      ux:
+        type: array
+        items:
+          $ref: '#/definitions/UX'
+  Worklist:
+    type: object
+    description: represents a person or a group assigned a task
+    properties:
+      id:
+        type: string
+      url:
         type: string
         format: url
       name:
         type: string
-      state:
-        type: string
-      subject:
-        type: string
       description:
         type: string
-      priority:
-        type: integer
-      lastModified:
+  Assignment:
+    type:
+    description: |
+      the assignment of a task to a person or group
+    properties:
+      id:
         type: string
-        format: date-time
-
+      url:
+        type: string
+        format: url
+      worklist:
+        type: string
+        format: url
+      task:
+        type: string
+        format: url
+      taskmaster:
+        type: string
+        format: url
+      ux:
+        type: array
+        items:
+          $ref: '#/definitions/UX'
+  UX:
+    type: object
+    description: |
+      a possible means for entering the data requested. The type can be
+      whatever is needed by the application implementation.
+    properties:
+      type:
+        type: string
+      url:
+        type: string
+        format: url
 
 
 
