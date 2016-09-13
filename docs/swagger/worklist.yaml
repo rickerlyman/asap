@@ -1,0 +1,117 @@
+swagger: '2.0'
+info:
+  version: 0.1.0
+  title: 'ASAP Assignment'
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  '/assignment':
+    get:
+      description: List of assignments
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
+    post:
+      description: assign a task
+      parameters:
+        - name: taskInstance
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Instance'
+      responses:
+        '200':
+          description: ID of new assignment
+          schema:
+            type: string
+  '/worklists':
+    get:
+      description: list of worklists
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
+  '/worklists/{worklistId}':
+    get:
+      description: worklist
+      parameters:
+        - name: worklistId
+          in: header
+          required: true
+          schema: string
+      responses:
+        200:
+          description: list of assignments
+          schema:
+            type: array
+            items:
+              type: string
+  '/worklists/{worklistId}/{assignmentId}':
+    get:
+      description: worklist
+      parameters:
+        - name: worklistId
+          in: header
+          required: true
+          schema: string
+        - name: assignmentId
+          in: header
+          required: true
+          schema: string
+      responses:
+        200:
+          description: assignment
+          schema:
+            $ref: '#definitions/Assignment'
+definitions:
+  Assignment:
+    type: object
+    properties:
+      id:
+        type: string
+      task:
+        type: string
+        format: url
+      instanceId:
+        type: string
+      worklistId:
+        type: string
+  Instance:
+    type: object
+    properties:
+      id:
+        type: string
+      url:
+        type: string
+        format: url
+      task:
+        type: string
+        format: url
+      name:
+        type: string
+      state:
+        type: string
+      subject:
+        type: string
+      description:
+        type: string
+      priority:
+        type: integer
+      lastModified:
+        type: string
+        format: date-time
+
+
+
+

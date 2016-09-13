@@ -1,0 +1,221 @@
+swagger: '2.0'
+info:
+  version: 0.1.0
+  title: 'ASAP Taskmaster'
+# TODO: change basepath for your service
+basePath: /yourServiceName
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  '/tasks':
+    get:
+      description: List of task instances
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
+              format: url
+    post:
+      description: create an new task
+      parameters:
+        - name: task
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/NewTask'
+      responses:
+        '200':
+          description: URL of new instance
+          schema:
+            type: string
+            format: url
+  '/tasks/{task}':
+    get:
+      description: Details of a task
+      parameters:
+        - name: task
+          in: path
+          description: task ID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Instance object
+          schema:
+            $ref: '#/definitions/Task'
+    delete:
+      description: |
+        Cancels an instance. Note that the instance resource will still
+        be there but will have state as canceled.
+      parameters:
+        - name: task
+          in: path
+          description: task ID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Task status
+          schema:
+            type: string
+  '/tasks/{task}/observers':
+    get:
+      description: List of observers
+      parameters:
+        - name: task
+          in: path
+          description: task ID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: List of observer ids
+          schema:
+            type: array
+            items:
+              type: string
+    post:
+      description: add an observer
+      parameters:
+        - name: task
+          in: path
+          description: task ID
+          type: string
+          required: true
+        - name: observer
+          in: body
+          schema:
+            type: string
+            format: url
+      responses:
+        200:
+          description: observer ID
+          schema:
+            type: string
+  '/tasks/{task}/observers/{observer}':
+    delete:
+      description: remove observer
+      parameters:
+        - name: task
+          in: path
+          description: task ID
+          type: string
+          required: true
+        - name: observer
+          in: path
+          description: observer ID
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+  '/tasks/{task}/state':
+    get:
+      description: get state of the task
+      parameters:
+        - name: task
+          in: path
+          description: task ID
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            type: string
+    put:
+      description: change state of task
+      parameters:
+        - name: task
+          in: path
+          description: task ID
+          type: string
+          required: true
+        - name: state
+          in: body
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+  '/tasks/{task}/context':
+    get:
+      description: get context of the task
+      parameters:
+        - name: task
+          in: path
+          description: task ID
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ContextData'
+    put:
+      description: change context of task
+      parameters:
+        - name: task
+          in: path
+          description: task ID
+          type: string
+          required: true
+        - name: context
+          in: body
+          schema:
+            $ref: '#/definitions/ContextData'
+      responses:
+        200:
+          description: OK
+definitions:
+  NewTask:
+    type: object
+    properties:
+      context:
+        type: string
+      observers:
+        type: array
+        items:
+          type: string
+          format: url
+  Task:
+    type: object
+    properties:
+      id:
+        type: string
+      url:
+        type: string
+        format: url
+      taskmaster:
+        type: string
+        format: url
+      state:
+        type: string
+      context:
+        $ref: '#/definitions/ContextData'
+      result:
+        $ref: '#/definitions/ResultData'
+      observers:
+        type: array
+        items:
+          type: string
+          format: url
+      lastModified:
+        type: string
+        format: date-time
+  ContextData:
+    # TODO: define for specific taskmaster
+    type: object
+  ResultData:
+    # TODO: define for specific taskmaster
+    type: object
+
+
+
