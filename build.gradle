@@ -12,7 +12,7 @@ dependencies{
     compile 'com.typesafe.akka:akka-actor_2.11:2.4.10'
     compile 'com.typesafe.akka:akka-http-experimental_2.11:2.4.10'
     compile 'org.scala-lang:scala-library:2.11.7'
-    testCompile 'org.scalatest:scalatest:2.2.5'
+    testCompile 'org.scalatest:scalatest_2.11:3.0.0'
 
 }
 

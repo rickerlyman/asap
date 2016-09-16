@@ -1,15 +1,19 @@
 package io.thingness.asap
 
+import java.util.UUID
+
 import akka.actor.Actor
 import akka.actor.Actor.Receive
 
 /**
   * Created by JeffR on 8/3/2016.
   */
-class InstanceService extends Actor {
-  override def receive: Receive = {
+class InstanceService(val id: UUID, val ctxData : Any) extends Actor {
+
+
+  override def receive = {
     case DataEntryRq =>
-    case ContextDataRq =>
+    case ContextDataRq => sender ! ctxData
     case ResultData =>
     case _ =>
   }
